@@ -8,7 +8,8 @@ router.get('/', function (req, res) {
     res.render('users.ejs')
 });
 
-router.post('/', (req, res) => {
+//POST users 
+router.post('/register', (req, res) => {
     const { username, email, password } = req.body;
     //const user_name = req.body.username;
     //const email = req.body.email;
@@ -25,7 +26,24 @@ router.post('/', (req, res) => {
     });
 });
 
-
+//POST login
+router.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    db.User.findOne({where: {user_name: username}})
+    .then(User => {
+        bcrypt.compare(password, User.password, (err, match) => {
+            if(match) {
+                res.send('Logged in!')
+            }
+            else {
+                res.send('Incorrect password!')
+            }
+        })
+    })
+    .catch(() => {
+        res.send('username not found')
+    })
+});
 
 
 
