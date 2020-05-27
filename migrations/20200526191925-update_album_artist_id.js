@@ -20,7 +20,7 @@ module.exports = {
   down: (queryInterface, Sequelize) => {
     return queryInterface.removeColumn(
       'Albums', // name of Source table
-      'artist_id' // key we want to remove
+      'album_id' // key we want to remove
     );
   }
  };
