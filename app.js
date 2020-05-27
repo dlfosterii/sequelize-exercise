@@ -2,12 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 const db = require('./models');
+const usersRouter = require('./routes/users')
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+//view engine setup
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -70,7 +72,22 @@ app.get('/artist/:id/albums', (req, res) => {
 
 });
 
+//Get all tracks on an album (not tested yet)
+app.get('/album/:id/tracks', (req, res) => {
+    db.Album.findByPk(req.params.id)
+        .then((Album) => {
+            return Album.getArtists()
+            // results.forEach((Album) => {
+            // })
+        }).then((results) => {
+            res.json(results);            
+        });
 
+});
+
+
+
+app.use('/users', usersRouter)
 
 app.listen(PORT, () => {
     console.log(`Listening. Open http://localhost:${PORT} to view.`);
